@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ollama Web Chat</title>
+  <title>Nullcore Web Chat</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -25,21 +25,12 @@
     <aside class="p-4 lg:p-6 border-b lg:border-b-0 lg:border-r border-slate-300/50 dark:border-slate-700/50 bg-white/50 dark:bg-slate-900/50 glass">
       <header class="flex items-center justify-between">
         <h1 class="text-xl font-bold">
-          <span class="gradient-text">Ollama Web Chat</span>
+          <span class="gradient-text">Nullcore Web Chat</span>
         </h1>
         <button id="themeToggle" class="px-3 py-2 text-sm rounded-xl border border-slate-300/60 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800">Tema</button>
       </header>
 
       <section class="mt-6 space-y-4">
-        <div>
-          <label class="text-xs uppercase tracking-wide text-slate-500">API Base URL</label>
-          <div class="mt-1 flex gap-2">
-            <input id="apiBase" type="text" class="w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white/80 dark:bg-slate-900/80 px-3 py-2" placeholder="http://localhost:11434" />
-            <button id="btnPing" title="Testar" class="rounded-xl border px-3 py-2 hover:bg-slate-100 dark:hover:bg-slate-800">Ping</button>
-          </div>
-          <p id="pingResult" class="mt-1 text-xs text-slate-500"></p>
-        </div>
-
         <div>
           <div class="flex items-center justify-between">
             <label class="text-xs uppercase tracking-wide text-slate-500">Modelo</label>
@@ -84,8 +75,7 @@
           <button id="btnClear" class="rounded-xl px-3 py-2 border border-rose-300 dark:border-rose-700 hover:bg-rose-50 dark:hover:bg-rose-900/30 text-rose-600 dark:text-rose-400">Limpar</button>
         </div>
 
-        <p class="text-xs text-slate-500 pt-2">Dica: se hospedar este HTML (ex.: Cloudflare Pages), configure o CORS do Ollama com <code>OLLAMA_ORIGINS</code> para permitir o domínio.</p>
-      </section>
+              </section>
     </aside>
 
     <!-- Main / Chat -->
@@ -121,7 +111,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.7/purify.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-
   <script>
     // ===== Helpers =====
     const $ = (q, el=document) => el.querySelector(q);
@@ -129,7 +118,7 @@
     const html = (strings, ...values) => strings.map((s, i) => s + (values[i] ?? '')).join('');
 
     const defaults = {
-      apiBase: 'http://localhost:11434',
+      apiBase: 'https://app.nullcore.ai:11434', // host fixo com a MESMA porta do Ollama
       model: '',
       temperature: 1.0,
       topp: 0.9,
@@ -146,15 +135,15 @@
     let abortController = null;
 
     function save() {
-      localStorage.setItem('ollama_settings', JSON.stringify(state.settings));
-      localStorage.setItem('ollama_chat', JSON.stringify(state.messages));
+      localStorage.setItem('nullcore_settings', JSON.stringify(state.settings));
+      localStorage.setItem('nullcore_chat', JSON.stringify(state.messages));
     }
 
     function load() {
       try {
-        const s = JSON.parse(localStorage.getItem('ollama_settings') || 'null');
+        const s = JSON.parse(localStorage.getItem('nullcore_settings') || localStorage.getItem('ollama_settings') || 'null');
         if (s) state.settings = { ...state.settings, ...s };
-        const m = JSON.parse(localStorage.getItem('ollama_chat') || 'null');
+        const m = JSON.parse(localStorage.getItem('nullcore_chat') || localStorage.getItem('ollama_chat') || 'null');
         if (m) state.messages = m;
       } catch {}
     }
@@ -244,7 +233,6 @@
 
     function bindSettingsUI() {
       const s = state.settings;
-      $('#apiBase').value = s.apiBase;
       $('#temperature').value = s.temperature;
       $('#valTemp').textContent = s.temperature.toFixed(1);
       $('#topp').value = s.topp;
@@ -254,7 +242,6 @@
       $('#seed').value = s.seed;
       $('#systemPrompt').value = s.systemPrompt || '';
 
-      $('#apiBase').addEventListener('change', e => { s.apiBase = e.target.value.trim(); save(); });
       $('#temperature').addEventListener('input', e => { s.temperature = Number(e.target.value); $('#valTemp').textContent = s.temperature.toFixed(1); save(); });
       $('#topp').addEventListener('input', e => { s.topp = Number(e.target.value); $('#valTopP').textContent = s.topp.toFixed(2); save(); });
       $('#numPredict').addEventListener('input', e => { s.numPredict = Number(e.target.value); $('#valTokens').textContent = s.numPredict; save(); });
@@ -266,9 +253,6 @@
         const isDark = !document.documentElement.classList.contains('dark');
         setTheme(isDark);
       });
-
-      // Ping
-      $('#btnPing').addEventListener('click', pingServer);
 
       // Models
       $('#btnRefreshModels').addEventListener('click', loadModels);
@@ -288,20 +272,6 @@
 
       $('#composer').addEventListener('submit', onSend);
       $('#btnStop').addEventListener('click', stopStreaming);
-    }
-
-    async function pingServer() {
-      const base = state.settings.apiBase;
-      const el = $('#pingResult');
-      el.textContent = 'Testando...';
-      try {
-        const res = await fetch(base + '/api/tags');
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const data = await res.json();
-        el.textContent = `OK · ${data?.models?.length || 0} modelos encontrados`;
-      } catch (err) {
-        el.textContent = 'Falhou: ' + err.message;
-      }
     }
 
     async function loadModels() {
@@ -367,7 +337,7 @@
     }
 
     async function streamChat() {
-      const base = state.settings.apiBase;
+      const base = state.settings.apiBase; // usa host fixo + porta do Ollama
       const model = state.settings.model;
       if (!model) { alert('Selecione um modelo.'); return; }
 
@@ -416,7 +386,8 @@
           done = d;
           if (value) buffer += decoder.decode(value, { stream: true });
 
-          let lines = buffer.split('\n');
+          let lines = buffer.split('
+');
           buffer = lines.pop(); // keep last partial
 
           for (const line of lines) {
@@ -439,7 +410,9 @@
 
       } catch (err) {
         const last = state.messages[state.messages.length - 1];
-        last.content += `\n\n> **Erro:** ${err.message}`;
+        last.content += `
+
+> **Erro:** ${err.message}`;
         renderMessages();
       } finally {
         save();
@@ -479,6 +452,9 @@
     (function init(){
       initTheme();
       load();
+      // força host fixo com porta 11434
+      state.settings.apiBase = 'https://app.nullcore.ai:11434';
+      save();
       bindSettingsUI();
       loadModels();
       renderMessages();
