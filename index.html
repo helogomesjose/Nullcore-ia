@@ -1,112 +1,112 @@
 <!doctype html>
 <html lang="pt-br" class="h-full">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Nullcore Web Chat</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <style>
-        /* Scrollbar suave */
-        * { scrollbar-width: thin; scrollbar-color: #6b7280 #0b0f19; }
-        *::-webkit-scrollbar { width: 10px; height: 10px; }
-        *::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 9999px; }
-        *::-webkit-scrollbar-track { background: transparent; }
-        .glass { backdrop-filter: blur(10px); background: rgba(255,255,255,0.08); }
-        .message prose { max-width: 100%; }
-        .gradient-text { background: linear-gradient(90deg, #8b5cf6, #22d3ee); -webkit-background-clip: text; background-clip: text; color: transparent; }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nullcore Web Chat</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <style>
+    /* Scrollbar suave */
+    * { scrollbar-width: thin; scrollbar-color: #6b7280 #0b0f19; }
+    *::-webkit-scrollbar { width: 10px; height: 10px; }
+    *::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 9999px; }
+    *::-webkit-scrollbar-track { background: transparent; }
+    .glass { backdrop-filter: blur(10px); background: rgba(255,255,255,0.08); }
+    .message prose { max-width: 100%; }
+    .gradient-text { background: linear-gradient(90deg, #8b5cf6, #22d3ee); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  </style>
 </head>
 <body class="h-full bg-slate-100 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
-<!-- App container -->
-<div class="min-h-screen grid lg:grid-cols-[320px_1fr]">
+  <!-- App container -->
+  <div class="min-h-screen grid lg:grid-cols-[320px_1fr]">
     <!-- Sidebar / Settings -->
     <aside class="p-4 lg:p-6 border-b lg:border-b-0 lg:border-r border-slate-300/50 dark:border-slate-700/50 bg-white/50 dark:bg-slate-900/50 glass">
-        <header class="flex items-center justify-between">
-            <h1 class="text-xl font-bold">
-                <span class="gradient-text">Nullcore Web Chat</span>
-            </h1>
-            <button id="themeToggle" class="px-3 py-2 text-sm rounded-xl border border-slate-300/60 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800">Tema</button>
-        </header>
+      <header class="flex items-center justify-between">
+        <h1 class="text-xl font-bold">
+          <span class="gradient-text">Nullcore Web Chat</span>
+        </h1>
+        <button id="themeToggle" class="px-3 py-2 text-sm rounded-xl border border-slate-300/60 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800">Tema</button>
+      </header>
 
-        <section class="mt-6 space-y-4">
-            <!-- seção de Modelo removida (modelo fixo) --><details class="rounded-xl border border-slate-300 dark:border-slate-700 bg-white/60 dark:bg-slate-900/60 p-3" open>
-            <summary class="cursor-pointer select-none font-medium">Parâmetros</summary>
-            <div class="space-y-3 mt-3">
-                <div>
-                    <div class="flex justify-between text-xs"><span>Temperatura</span><span id="valTemp">1.0</span></div>
-                    <input id="temperature" type="range" min="0" max="2" step="0.1" value="1" class="w-full" />
-                </div>
-                <div>
-                    <div class="flex justify-between text-xs"><span>Top P</span><span id="valTopP">0.9</span></div>
-                    <input id="topp" type="range" min="0" max="1" step="0.05" value="0.9" class="w-full" />
-                </div>
-                <div>
-                    <div class="flex justify-between text-xs"><span>Máx. tokens (num_predict)</span><span id="valTokens">512</span></div>
-                    <input id="numPredict" type="range" min="64" max="4096" step="64" value="512" class="w-full" />
-                </div>
-                <div>
-                    <label class="text-xs">Seed (opcional)</label>
-                    <input id="seed" type="number" class="mt-1 w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white/80 dark:bg-slate-900/80 px-3 py-2" placeholder="ex.: 42" />
-                </div>
+      <section class="mt-6 space-y-4">
+        <!-- seção de Modelo removida (modelo fixo) --><details class="rounded-xl border border-slate-300 dark:border-slate-700 bg-white/60 dark:bg-slate-900/60 p-3" open>
+          <summary class="cursor-pointer select-none font-medium">Parâmetros</summary>
+          <div class="space-y-3 mt-3">
+            <div>
+              <div class="flex justify-between text-xs"><span>Temperatura</span><span id="valTemp">1.0</span></div>
+              <input id="temperature" type="range" min="0" max="2" step="0.1" value="1" class="w-full" />
             </div>
+            <div>
+              <div class="flex justify-between text-xs"><span>Top P</span><span id="valTopP">0.9</span></div>
+              <input id="topp" type="range" min="0" max="1" step="0.05" value="0.9" class="w-full" />
+            </div>
+            <div>
+              <div class="flex justify-between text-xs"><span>Máx. tokens (num_predict)</span><span id="valTokens">512</span></div>
+              <input id="numPredict" type="range" min="64" max="4096" step="64" value="512" class="w-full" />
+            </div>
+            <div>
+              <label class="text-xs">Seed (opcional)</label>
+              <input id="seed" type="number" class="mt-1 w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white/80 dark:bg-slate-900/80 px-3 py-2" placeholder="ex.: 42" />
+            </div>
+          </div>
         </details>
 
-            <details class="rounded-xl border border-slate-300 dark:border-slate-700 bg-white/60 dark:bg-slate-900/60 p-3">
-                <summary class="cursor-pointer select-none font-medium">System Prompt</summary>
-                <textarea id="systemPrompt" rows="6" class="mt-3 w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white/80 dark:bg-slate-900/80 px-3 py-2" placeholder="Defina o comportamento do modelo aqui..."></textarea>
-            </details>
+        <details class="rounded-xl border border-slate-300 dark:border-slate-700 bg-white/60 dark:bg-slate-900/60 p-3">
+          <summary class="cursor-pointer select-none font-medium">System Prompt</summary>
+          <textarea id="systemPrompt" rows="6" class="mt-3 w-full rounded-xl border border-slate-300 dark:border-slate-700 bg-white/80 dark:bg-slate-900/80 px-3 py-2" placeholder="Defina o comportamento do modelo aqui..."></textarea>
+        </details>
 
-            <div class="grid grid-cols-2 gap-2 pt-2">
-                <button id="btnNew" class="rounded-xl px-3 py-2 border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800">Novo chat</button>
-                <button id="btnExport" class="rounded-xl px-3 py-2 border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800">Exportar</button>
-                <label class="rounded-xl px-3 py-2 border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-center cursor-pointer">Importar
-                    <input id="importFile" type="file" accept="application/json" class="hidden" />
-                </label>
-                <button id="btnClear" class="rounded-xl px-3 py-2 border border-rose-300 dark:border-rose-700 hover:bg-rose-50 dark:hover:bg-rose-900/30 text-rose-600 dark:text-rose-400">Limpar</button>
-            </div>
+        <div class="grid grid-cols-2 gap-2 pt-2">
+          <button id="btnNew" class="rounded-xl px-3 py-2 border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800">Novo chat</button>
+          <button id="btnExport" class="rounded-xl px-3 py-2 border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800">Exportar</button>
+          <label class="rounded-xl px-3 py-2 border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-center cursor-pointer">Importar
+            <input id="importFile" type="file" accept="application/json" class="hidden" />
+          </label>
+          <button id="btnClear" class="rounded-xl px-3 py-2 border border-rose-300 dark:border-rose-700 hover:bg-rose-50 dark:hover:bg-rose-900/30 text-rose-600 dark:text-rose-400">Limpar</button>
+        </div>
 
-        </section>
+              </section>
     </aside>
 
     <!-- Main / Chat -->
     <main class="flex flex-col min-h-screen">
-        <!-- Top bar -->
-        <div class="sticky top-0 z-10 border-b border-slate-300/50 dark:border-slate-700/50 bg-white/70 dark:bg-slate-950/70 glass">
-            <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                    <div class="h-2 w-2 rounded-full bg-emerald-500" id="statusLed"></div>
-                    <span id="statusText" class="text-sm">Pronto</span>
-                </div>
-                <div class="flex items-center gap-2 text-sm">
-                    <span id="currentModel" class="opacity-80"></span>
-                </div>
-            </div>
+      <!-- Top bar -->
+      <div class="sticky top-0 z-10 border-b border-slate-300/50 dark:border-slate-700/50 bg-white/70 dark:bg-slate-950/70 glass">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <div class="h-2 w-2 rounded-full bg-emerald-500" id="statusLed"></div>
+            <span id="statusText" class="text-sm">Pronto</span>
+          </div>
+          <div class="flex items-center gap-2 text-sm">
+            <span id="currentModel" class="opacity-80"></span>
+          </div>
         </div>
+      </div>
 
-        <!-- Messages -->
-        <div id="messages" class="flex-1 max-w-5xl mx-auto w-full px-4 py-6 space-y-4"></div>
+      <!-- Messages -->
+      <div id="messages" class="flex-1 max-w-5xl mx-auto w-full px-4 py-6 space-y-4"></div>
 
-        <!-- Composer -->
-        <div class="border-t border-slate-300/50 dark:border-slate-700/50 bg-white/70 dark:bg-slate-950/70 glass">
-            <form id="composer" class="max-w-4xl mx-auto p-4 flex gap-3">
-                <textarea id="input" rows="1" placeholder="Digite sua mensagem... (Shift+Enter = quebra de linha)" class="flex-1 resize-none rounded-2xl border border-slate-300 dark:border-slate-700 bg-white/90 dark:bg-slate-900/80 px-4 py-3"></textarea>
-                <button id="btnSend" type="submit" class="rounded-2xl px-5 py-3 font-semibold bg-gradient-to-r from-violet-600 to-cyan-400 text-white shadow-md">Enviar</button>
-                <button id="btnStop" type="button" class="rounded-2xl px-4 py-3 border border-slate-300 dark:border-slate-700 hidden">Parar</button>
-            </form>
-        </div>
+      <!-- Composer -->
+      <div class="border-t border-slate-300/50 dark:border-slate-700/50 bg-white/70 dark:bg-slate-950/70 glass">
+        <form id="composer" class="max-w-4xl mx-auto p-4 flex gap-3">
+          <textarea id="input" rows="1" placeholder="Digite sua mensagem... (Shift+Enter = quebra de linha)" class="flex-1 resize-none rounded-2xl border border-slate-300 dark:border-slate-700 bg-white/90 dark:bg-slate-900/80 px-4 py-3"></textarea>
+          <button id="btnSend" type="submit" class="rounded-2xl px-5 py-3 font-semibold bg-gradient-to-r from-violet-600 to-cyan-400 text-white shadow-md">Enviar</button>
+          <button id="btnStop" type="button" class="rounded-2xl px-4 py-3 border border-slate-300 dark:border-slate-700 hidden">Parar</button>
+        </form>
+      </div>
     </main>
-</div>
+  </div>
 
-<!-- libs -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.7/purify.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <!-- libs -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.7/purify.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 
-<script>
+  <script>
     // ===== Config: host fixo =====
-    const FIXED_BASE = 'http://app.nullcore.ai:11434'; // mesma porta do Ollama
+    const FIXED_BASE = 'http://app.nullcore.ai:11434'; // backend só HTTP // mesma porta do Ollama
 
     // ===== Helpers =====
     const $ = (q, el=document) => el.querySelector(q);
@@ -114,350 +114,355 @@
     const html = (strings, ...values) => strings.map((s, i) => s + (values[i] ?? '')).join('');
 
     const defaults = {
-        apiBase: FIXED_BASE, // mantemos no state só por compatibilidade
-        model: '',
-        temperature: 1.0,
-        topp: 0.9,
-        numPredict: 512,
-        seed: '',
-        systemPrompt: ''
+      apiBase: FIXED_BASE, // mantemos no state só por compatibilidade
+      model: '',
+      temperature: 1.0,
+      topp: 0.9,
+      numPredict: 512,
+      seed: '',
+      systemPrompt: ''
     };
 
     const state = {
-        settings: { ...defaults },
-        messages: [] // {role: 'user'|'assistant'|'system', content: string}
+      settings: { ...defaults },
+      messages: [] // {role: 'user'|'assistant'|'system', content: string}
     };
 
     let abortController = null;
 
     function save() {
-        localStorage.setItem('nullcore_settings', JSON.stringify(state.settings));
-        localStorage.setItem('nullcore_chat', JSON.stringify(state.messages));
+      localStorage.setItem('nullcore_settings', JSON.stringify(state.settings));
+      localStorage.setItem('nullcore_chat', JSON.stringify(state.messages));
     }
 
     function load() {
-        try {
-            const s = JSON.parse(localStorage.getItem('nullcore_settings') || localStorage.getItem('ollama_settings') || 'null');
-            if (s) state.settings = { ...state.settings, ...s };
-            const m = JSON.parse(localStorage.getItem('nullcore_chat') || localStorage.getItem('ollama_chat') || 'null');
-            if (m) state.messages = m;
-        } catch {}
+      try {
+        const s = JSON.parse(localStorage.getItem('nullcore_settings') || localStorage.getItem('ollama_settings') || 'null');
+        if (s) state.settings = { ...state.settings, ...s };
+        const m = JSON.parse(localStorage.getItem('nullcore_chat') || localStorage.getItem('ollama_chat') || 'null');
+        if (m) state.messages = m;
+      } catch {}
     }
 
     function setTheme(dark) {
-        const root = document.documentElement;
-        if (dark) root.classList.add('dark'); else root.classList.remove('dark');
-        localStorage.setItem('theme_dark', dark ? '1' : '0');
+      const root = document.documentElement;
+      if (dark) root.classList.add('dark'); else root.classList.remove('dark');
+      localStorage.setItem('theme_dark', dark ? '1' : '0');
     }
 
     function initTheme() {
-        const saved = localStorage.getItem('theme_dark');
-        const prefers = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        setTheme(saved ? saved === '1' : prefers);
+      const saved = localStorage.getItem('theme_dark');
+      const prefers = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setTheme(saved ? saved === '1' : prefers);
     }
 
     function formatMarkdown(md) {
-        const htmlRaw = marked.parse(md, { breaks: true, gfm: true });
-        const clean = DOMPurify.sanitize(htmlRaw);
-        return clean;
+      const htmlRaw = marked.parse(md, { breaks: true, gfm: true });
+      const clean = DOMPurify.sanitize(htmlRaw);
+      return clean;
     }
 
     function enhanceCodeBlocks(scope) {
-        $$('pre code', scope).forEach(block => {
-            try { hljs.highlightElement(block); } catch {}
-            // Add copy button
-            const pre = block.closest('pre');
-            if (!pre.querySelector('.copy-btn')) {
-                const btn = document.createElement('button');
-                btn.textContent = 'Copiar';
-                btn.className = 'copy-btn absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-800 text-white/90 hover:bg-slate-700';
-                btn.addEventListener('click', async () => {
-                    await navigator.clipboard.writeText(block.innerText);
-                    btn.textContent = 'Copiado!';
-                    setTimeout(() => btn.textContent = 'Copiar', 1500);
-                });
-                pre.classList.add('relative');
-                pre.appendChild(btn);
-            }
-        });
+      $$('pre code', scope).forEach(block => {
+        try { hljs.highlightElement(block); } catch {}
+        // Add copy button
+        const pre = block.closest('pre');
+        if (!pre.querySelector('.copy-btn')) {
+          const btn = document.createElement('button');
+          btn.textContent = 'Copiar';
+          btn.className = 'copy-btn absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-800 text-white/90 hover:bg-slate-700';
+          btn.addEventListener('click', async () => {
+            await navigator.clipboard.writeText(block.innerText);
+            btn.textContent = 'Copiado!';
+            setTimeout(() => btn.textContent = 'Copiar', 1500);
+          });
+          pre.classList.add('relative');
+          pre.appendChild(btn);
+        }
+      });
     }
 
     function renderMessages() {
-        const box = $('#messages');
-        box.innerHTML = '';
-        state.messages.forEach((m, idx) => {
-            const isUser = m.role === 'user';
-            const bubble = document.createElement('div');
-            bubble.className = `message flex gap-3 ${isUser ? 'justify-end' : 'justify-start'}`;
+      const box = $('#messages');
+      box.innerHTML = '';
+      state.messages.forEach((m, idx) => {
+        const isUser = m.role === 'user';
+        const bubble = document.createElement('div');
+        bubble.className = `message flex gap-3 ${isUser ? 'justify-end' : 'justify-start'}`;
 
-            const content = document.createElement('div');
-            content.className = `${isUser ? 'bg-violet-600 text-white' : 'bg-white/80 dark:bg-slate-900/70 border border-slate-300/40 dark:border-slate-700/40'} max-w-[80ch] w-fit rounded-2xl px-4 py-3 shadow-sm`;
+        const content = document.createElement('div');
+        content.className = `${isUser ? 'bg-violet-600 text-white' : 'bg-white/80 dark:bg-slate-900/70 border border-slate-300/40 dark:border-slate-700/40'} max-w-[80ch] w-fit rounded-2xl px-4 py-3 shadow-sm`;
 
-            const inner = document.createElement('div');
-            inner.className = 'prose prose-invert dark:prose-invert prose-slate max-w-none';
-            inner.innerHTML = formatMarkdown(m.content || '');
+        const inner = document.createElement('div');
+        inner.className = 'prose prose-invert dark:prose-invert prose-slate max-w-none';
+        inner.innerHTML = formatMarkdown(m.content || '');
 
-            content.appendChild(inner);
-            bubble.appendChild(content);
+        content.appendChild(inner);
+        bubble.appendChild(content);
 
-            // Actions row
-            const actions = document.createElement('div');
-            actions.className = 'flex items-center gap-2 text-xs mt-1 opacity-70';
-            const copyBtn = document.createElement('button');
-            copyBtn.textContent = 'Copiar';
-            copyBtn.className = 'underline';
-            copyBtn.onclick = async () => {
-                await navigator.clipboard.writeText(m.content || '');
-                copyBtn.textContent = 'Copiado!';
-                setTimeout(()=> copyBtn.textContent='Copiar', 1200);
-            };
-            const delBtn = document.createElement('button');
-            delBtn.textContent = 'Excluir';
-            delBtn.className = 'underline';
-            delBtn.onclick = () => { state.messages.splice(idx,1); save(); renderMessages(); };
-            actions.appendChild(copyBtn);
-            actions.appendChild(document.createTextNode('·'));
-            actions.appendChild(delBtn);
-            bubble.appendChild(actions);
+        // Actions row
+        const actions = document.createElement('div');
+        actions.className = 'flex items-center gap-2 text-xs mt-1 opacity-70';
+        const copyBtn = document.createElement('button');
+        copyBtn.textContent = 'Copiar';
+        copyBtn.className = 'underline';
+        copyBtn.onclick = async () => {
+          await navigator.clipboard.writeText(m.content || '');
+          copyBtn.textContent = 'Copiado!';
+          setTimeout(()=> copyBtn.textContent='Copiar', 1200);
+        };
+        const delBtn = document.createElement('button');
+        delBtn.textContent = 'Excluir';
+        delBtn.className = 'underline';
+        delBtn.onclick = () => { state.messages.splice(idx,1); save(); renderMessages(); };
+        actions.appendChild(copyBtn);
+        actions.appendChild(document.createTextNode('·'));
+        actions.appendChild(delBtn);
+        bubble.appendChild(actions);
 
-            box.appendChild(bubble);
-        });
-        enhanceCodeBlocks(box);
-        // scroll bottom
-        box.scrollTo({ top: box.scrollHeight, behavior: 'smooth' });
+        box.appendChild(bubble);
+      });
+      enhanceCodeBlocks(box);
+      // scroll bottom
+      box.scrollTo({ top: box.scrollHeight, behavior: 'smooth' });
     }
 
     function bindSettingsUI() {
-        const s = state.settings;
-        $('#temperature').value = s.temperature;
-        $('#valTemp').textContent = s.temperature.toFixed(1);
-        $('#topp').value = s.topp;
-        $('#valTopP').textContent = s.topp.toFixed(2);
-        $('#numPredict').value = s.numPredict;
-        $('#valTokens').textContent = s.numPredict;
-        $('#seed').value = s.seed;
-        $('#systemPrompt').value = s.systemPrompt || '';
+      const s = state.settings;
+      $('#temperature').value = s.temperature;
+      $('#valTemp').textContent = s.temperature.toFixed(1);
+      $('#topp').value = s.topp;
+      $('#valTopP').textContent = s.topp.toFixed(2);
+      $('#numPredict').value = s.numPredict;
+      $('#valTokens').textContent = s.numPredict;
+      $('#seed').value = s.seed;
+      $('#systemPrompt').value = s.systemPrompt || '';
 
-        $('#temperature').addEventListener('input', e => { s.temperature = Number(e.target.value); $('#valTemp').textContent = s.temperature.toFixed(1); save(); });
-        $('#topp').addEventListener('input', e => { s.topp = Number(e.target.value); $('#valTopP').textContent = s.topp.toFixed(2); save(); });
-        $('#numPredict').addEventListener('input', e => { s.numPredict = Number(e.target.value); $('#valTokens').textContent = s.numPredict; save(); });
-        $('#seed').addEventListener('change', e => { s.seed = e.target.value; save(); });
-        $('#systemPrompt').addEventListener('change', e => { s.systemPrompt = e.target.value; save(); });
+      $('#temperature').addEventListener('input', e => { s.temperature = Number(e.target.value); $('#valTemp').textContent = s.temperature.toFixed(1); save(); });
+      $('#topp').addEventListener('input', e => { s.topp = Number(e.target.value); $('#valTopP').textContent = s.topp.toFixed(2); save(); });
+      $('#numPredict').addEventListener('input', e => { s.numPredict = Number(e.target.value); $('#valTokens').textContent = s.numPredict; save(); });
+      $('#seed').addEventListener('change', e => { s.seed = e.target.value; save(); });
+      $('#systemPrompt').addEventListener('change', e => { s.systemPrompt = e.target.value; save(); });
 
-        // Theme
-        $('#themeToggle').addEventListener('click', () => {
-            const isDark = !document.documentElement.classList.contains('dark');
-            setTheme(isDark);
-        });
+      // Theme
+      $('#themeToggle').addEventListener('click', () => {
+        const isDark = !document.documentElement.classList.contains('dark');
+        setTheme(isDark);
+      });
 
-        // Models
+      // Models
+      
+      // Chat mgmt
+      $('#btnNew').addEventListener('click', () => { state.messages = []; save(); renderMessages(); });
+      $('#btnExport').addEventListener('click', exportChat);
+      $('#importFile').addEventListener('change', importChat);
+      $('#btnClear').addEventListener('click', () => { if(confirm('Limpar conversa?')) { state.messages = []; save(); renderMessages(); } });
 
-        // Chat mgmt
-        $('#btnNew').addEventListener('click', () => { state.messages = []; save(); renderMessages(); });
-        $('#btnExport').addEventListener('click', exportChat);
-        $('#importFile').addEventListener('change', importChat);
-        $('#btnClear').addEventListener('click', () => { if(confirm('Limpar conversa?')) { state.messages = []; save(); renderMessages(); } });
+      // Composer
+      const input = $('#input');
+      input.addEventListener('input', autoGrow);
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); $('#composer').requestSubmit(); }
+      });
 
-        // Composer
-        const input = $('#input');
-        input.addEventListener('input', autoGrow);
-        input.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); $('#composer').requestSubmit(); }
-        });
+      $('#composer').addEventListener('submit', onSend);
+      $('#btnStop').addEventListener('click', stopStreaming);
 
-        $('#composer').addEventListener('submit', onSend);
-        $('#btnStop').addEventListener('click', stopStreaming);
-
-        // Se existir campo de API Base, apenas mostra fixo e desabilita
-        const api = $('#apiBase');
-        if (api) { api.value = FIXED_BASE; api.setAttribute('disabled',''); }
+      // Se existir campo de API Base, apenas mostra fixo e desabilita
+      const api = $('#apiBase');
+      if (api) { api.value = FIXED_BASE; api.setAttribute('disabled',''); }
     }
 
     async function loadModels() {
-        const sel = $('#model');
-        sel.innerHTML = '<option>Carregando...</option>';
-        try {
-            const res = await fetch(FIXED_BASE + '/api/tags');
-            const data = await res.json();
-            sel.innerHTML = '';
-            const models = (data?.models || []).map(m => m.name).sort();
-            if (models.length === 0) sel.innerHTML = '<option>Nenhum modelo</option>';
-            models.forEach(name => {
-                const opt = document.createElement('option');
-                opt.value = name; opt.textContent = name;
-                if (!state.settings.model) state.settings.model = name;
-                if (state.settings.model === name) opt.selected = true;
-                sel.appendChild(opt);
-            });
-            sel.addEventListener('change', e => { state.settings.model = e.target.value; save(); updateHeaderModel(); });
-            save();
-            updateHeaderModel();
-        } catch (e) {
-            sel.innerHTML = '<option>Erro ao carregar</option>';
-            setStatus('Falha ao buscar modelos', 'bg-rose-500');
-        }
+      const sel = $('#model');
+      sel.innerHTML = '<option>Carregando...</option>';
+      try {
+        const res = await fetch(FIXED_BASE + '/api/tags');
+        const data = await res.json();
+        sel.innerHTML = '';
+        const models = (data?.models || []).map(m => m.name).sort();
+        if (models.length === 0) sel.innerHTML = '<option>Nenhum modelo</option>';
+        models.forEach(name => {
+          const opt = document.createElement('option');
+          opt.value = name; opt.textContent = name;
+          if (!state.settings.model) state.settings.model = name;
+          if (state.settings.model === name) opt.selected = true;
+          sel.appendChild(opt);
+        });
+        sel.addEventListener('change', e => { state.settings.model = e.target.value; save(); updateHeaderModel(); });
+        save();
+        updateHeaderModel();
+      } catch (e) {
+        sel.innerHTML = '<option>Erro ao carregar</option>';
+        setStatus('Falha ao buscar modelos', 'bg-rose-500');
+      }
     }
 
     function updateHeaderModel() { const el = document.getElementById('currentModel'); if (el) el.textContent = ''; }
 
     function autoGrow() {
-        const ta = $('#input');
-        ta.style.height = 'auto';
-        ta.style.height = Math.min(220, ta.scrollHeight) + 'px';
+      const ta = $('#input');
+      ta.style.height = 'auto';
+      ta.style.height = Math.min(220, ta.scrollHeight) + 'px';
     }
 
     function setStatus(text, color='bg-emerald-500') {
-        $('#statusText').textContent = text;
-        const led = $('#statusLed');
-        led.className = 'h-2 w-2 rounded-full ' + color;
+      $('#statusText').textContent = text;
+      const led = $('#statusLed');
+      led.className = 'h-2 w-2 rounded-full ' + color;
     }
 
     async function onSend(e) {
-        e.preventDefault();
-        const input = $('#input');
-        const content = input.value.trim();
-        if (!content) return;
-        input.value = ''; autoGrow();
+      e.preventDefault();
+      const input = $('#input');
+      const content = input.value.trim();
+      if (!content) return;
+      input.value = ''; autoGrow();
 
-        // Push user msg
-        state.messages.push({ role: 'user', content });
-        save(); renderMessages();
+      // Push user msg
+      state.messages.push({ role: 'user', content });
+      save(); renderMessages();
 
-        // Push placeholder assistant msg
-        state.messages.push({ role: 'assistant', content: '' });
-        save(); renderMessages();
+      // Push placeholder assistant msg
+      state.messages.push({ role: 'assistant', content: '' });
+      save(); renderMessages();
 
-        streamChat();
+      streamChat();
     }
 
     function stopStreaming() {
-        if (abortController) abortController.abort();
+      if (abortController) abortController.abort();
     }
 
     async function streamChat() {
-        const model = state.settings.model;
-        if (!model) { alert('Selecione um modelo.'); return; }
+      const model = state.settings.model;
+      if (!model) { alert('Selecione um modelo.'); return; }
 
-        const messages = [];
-        if (state.settings.systemPrompt?.trim()) {
-            messages.push({ role: 'system', content: state.settings.systemPrompt.trim() });
-        }
-        messages.push(...state.messages.filter(m => m.role !== 'system'));
+      const messages = [];
+      if (state.settings.systemPrompt?.trim()) {
+        messages.push({ role: 'system', content: state.settings.systemPrompt.trim() });
+      }
+      messages.push(...state.messages.filter(m => m.role !== 'system'));
 
-        const body = {
-            model,
-            messages,
-            stream: true,
-            options: {
-                temperature: state.settings.temperature,
-                top_p: state.settings.topp,
-                num_predict: state.settings.numPredict,
-                seed: state.settings.seed ? Number(state.settings.seed) : undefined,
-            },
-        };
+      const body = {
+        model,
+        messages,
+        stream: true,
+        options: {
+          temperature: state.settings.temperature,
+          top_p: state.settings.topp,
+          num_predict: state.settings.numPredict,
+          seed: state.settings.seed ? Number(state.settings.seed) : undefined,
+        },
+      };
 
-        const reqInit = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(body),
-        };
+      const reqInit = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      };
 
-        abortController = new AbortController();
-        reqInit.signal = abortController.signal;
+      abortController = new AbortController();
+      reqInit.signal = abortController.signal;
 
-        setStatus('Respondendo...', 'bg-cyan-400');
-        $('#btnSend').classList.add('hidden');
-        $('#btnStop').classList.remove('hidden');
+      setStatus('Respondendo...', 'bg-cyan-400');
+      $('#btnSend').classList.add('hidden');
+      $('#btnStop').classList.remove('hidden');
 
-        try {
-            const res = await fetch(FIXED_BASE + '/api/chat', reqInit);
-            if (!res.ok || !res.body) throw new Error('HTTP ' + res.status);
+      try {
+        const res = await fetch(FIXED_BASE + '/api/chat', reqInit);
+        if (!res.ok || !res.body) throw new Error('HTTP ' + res.status);
 
-            const reader = res.body.getReader();
-            const decoder = new TextDecoder();
-            let buffer = '';
-            let done = false;
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = '';
+        let done = false;
 
-            while (!done) {
-                const { value, done: d } = await reader.read();
-                done = d;
-                if (value) buffer += decoder.decode(value, { stream: true });
+        while (!done) {
+          const { value, done: d } = await reader.read();
+          done = d;
+          if (value) buffer += decoder.decode(value, { stream: true });
 
-                let lines = buffer.split('\n');
-                buffer = lines.pop(); // keep last partial
+          let lines = buffer.split('\n');
+          buffer = lines.pop(); // keep last partial
 
-                for (const line of lines) {
-                    const trimmed = line.trim();
-                    if (!trimmed) continue;
-                    let chunk;
-                    try { chunk = JSON.parse(trimmed); } catch { continue; }
-                    if (chunk.error) throw new Error(chunk.error);
-                    if (chunk.message && typeof chunk.message.content === 'string') {
-                        // append token(s)
-                        const last = state.messages[state.messages.length - 1];
-                        last.content += chunk.message.content;
-                        renderMessages();
-                    }
-                }
+          for (const line of lines) {
+            const trimmed = line.trim();
+            if (!trimmed) continue;
+            let chunk;
+            try { chunk = JSON.parse(trimmed); } catch { continue; }
+            if (chunk.error) throw new Error(chunk.error);
+            if (chunk.message && typeof chunk.message.content === 'string') {
+              // append token(s)
+              const last = state.messages[state.messages.length - 1];
+              last.content += chunk.message.content;
+              renderMessages();
             }
+          }
+        }
 
-        } catch (err) {
-            const last = state.messages[state.messages.length - 1];
-            last.content += `
+      } catch (err) {
+        const last = state.messages[state.messages.length - 1];
+        last.content += `
 
 > **Erro:** ${err.message}`;
-            renderMessages();
-            setStatus('Erro ao responder', 'bg-rose-500');
-        } finally {
-            save();
-            $('#btnSend').classList.remove('hidden');
-            $('#btnStop').classList.add('hidden');
-            abortController = null;
-        }
+        renderMessages();
+        setStatus('Erro ao responder', 'bg-rose-500');
+      } finally {
+        save();
+        $('#btnSend').classList.remove('hidden');
+        $('#btnStop').classList.add('hidden');
+        abortController = null;
+      }
     }
 
     function exportChat() {
-        const blob = new Blob([JSON.stringify({ settings: state.settings, messages: state.messages }, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url; a.download = 'nullcore_chat.json';
-        a.click();
-        setTimeout(()=>URL.revokeObjectURL(url), 500);
+      const blob = new Blob([JSON.stringify({ settings: state.settings, messages: state.messages }, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'nullcore_chat.json';
+      a.click();
+      setTimeout(()=>URL.revokeObjectURL(url), 500);
     }
 
     function importChat(ev) {
-        const file = ev.target.files?.[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onload = () => {
-            try {
-                const data = JSON.parse(reader.result);
-                if (data.settings) state.settings = { ...state.settings, ...data.settings };
-                if (Array.isArray(data.messages)) state.messages = data.messages;
-                save();
-                bindSettingsUI(); renderMessages(); updateHeaderModel();
-            } catch (e) { alert('Arquivo inválido.'); }
-        };
-        reader.readAsText(file);
+      const file = ev.target.files?.[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const data = JSON.parse(reader.result);
+          if (data.settings) state.settings = { ...state.settings, ...data.settings };
+          if (Array.isArray(data.messages)) state.messages = data.messages;
+          save();
+          bindSettingsUI(); renderMessages(); updateHeaderModel();
+        } catch (e) { alert('Arquivo inválido.'); }
+      };
+      reader.readAsText(file);
     }
 
     // ===== Boot =====
     (function init(){
-        initTheme();
-        load();
-        // força host fixo com porta 11434 e aplica na UI, se existir
-        state.settings.apiBase = FIXED_BASE;
-        state.settings.model = 'gemma2:27b';
-        save();
-        const api = $('#apiBase');
-        if (api) { api.value = FIXED_BASE; api.setAttribute('disabled',''); }
-        bindSettingsUI();
-        // loadModels desativado (modelo fixo)
-        renderMessages();
-        updateHeaderModel();
-        autoGrow();
-        setStatus('Pronto', 'bg-emerald-500');
+      initTheme();
+      load();
+      // Aviso de mixed content quando a página estiver em HTTPS e a API em HTTP
+      if (location.protocol === 'https:') {
+        setStatus('Bloqueado: página em HTTPS e API em HTTP. Abra via http:// (sem cadeado) ou use um proxy HTTPS.', 'bg-amber-500');
+        console.warn('Mixed content bloqueado pelo navegador. Abra esta página via HTTP ou configure proxy HTTPS para a API.');
+      }
+      // força host fixo com porta 11434 e aplica na UI, se existir
+      state.settings.apiBase = FIXED_BASE;
+      state.settings.model = 'gemma2:27b';
+      save();
+      const api = $('#apiBase');
+      if (api) { api.value = FIXED_BASE; api.setAttribute('disabled',''); }
+      bindSettingsUI();
+      // loadModels desativado (modelo fixo)
+      renderMessages();
+      updateHeaderModel();
+      autoGrow();
+      setStatus('Pronto', 'bg-emerald-500');
     })();
-</script>
+  </script>
 </body>
 </html>
