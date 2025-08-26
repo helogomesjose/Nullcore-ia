@@ -111,14 +111,18 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.7/purify.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
   <script>
+    // ===== Config: host fixo =====
+    const FIXED_BASE = 'https://app.nullcore.ai:11434'; // mesma porta do Ollama
+
     // ===== Helpers =====
     const $ = (q, el=document) => el.querySelector(q);
     const $$ = (q, el=document) => Array.from(el.querySelectorAll(q));
     const html = (strings, ...values) => strings.map((s, i) => s + (values[i] ?? '')).join('');
 
     const defaults = {
-      apiBase: 'https://app.nullcore.ai:11434', // host fixo com a MESMA porta do Ollama
+      apiBase: FIXED_BASE, // mantemos no state só por compatibilidade
       model: '',
       temperature: 1.0,
       topp: 0.9,
@@ -171,7 +175,7 @@
         try { hljs.highlightElement(block); } catch {}
         // Add copy button
         const pre = block.closest('pre');
-        if (!pre.querySelector('.copy-btn')) {
+        if (!pre.querySelector(' .copy-btn')) {
           const btn = document.createElement('button');
           btn.textContent = 'Copiar';
           btn.className = 'copy-btn absolute top-2 right-2 text-xs px-2 py-1 rounded bg-slate-800 text-white/90 hover:bg-slate-700';
@@ -272,13 +276,17 @@
 
       $('#composer').addEventListener('submit', onSend);
       $('#btnStop').addEventListener('click', stopStreaming);
+
+      // Se existir campo de API Base, apenas mostra fixo e desabilita
+      const api = $('#apiBase');
+      if (api) { api.value = FIXED_BASE; api.setAttribute('disabled',''); }
     }
 
     async function loadModels() {
       const sel = $('#model');
       sel.innerHTML = '<option>Carregando...</option>';
       try {
-        const res = await fetch(state.settings.apiBase + '/api/tags');
+        const res = await fetch(FIXED_BASE + '/api/tags');
         const data = await res.json();
         sel.innerHTML = '';
         const models = (data?.models || []).map(m => m.name).sort();
@@ -295,6 +303,7 @@
         updateHeaderModel();
       } catch (e) {
         sel.innerHTML = '<option>Erro ao carregar</option>';
+        setStatus('Falha ao buscar modelos', 'bg-rose-500');
       }
     }
 
@@ -337,7 +346,6 @@
     }
 
     async function streamChat() {
-      const base = state.settings.apiBase; // usa host fixo + porta do Ollama
       const model = state.settings.model;
       if (!model) { alert('Selecione um modelo.'); return; }
 
@@ -373,7 +381,7 @@
       $('#btnStop').classList.remove('hidden');
 
       try {
-        const res = await fetch(base + '/api/chat', reqInit);
+        const res = await fetch(FIXED_BASE + '/api/chat', reqInit);
         if (!res.ok || !res.body) throw new Error('HTTP ' + res.status);
 
         const reader = res.body.getReader();
@@ -402,9 +410,6 @@
               last.content += chunk.message.content;
               renderMessages();
             }
-            if (chunk.done) {
-              // final stats available in chunk
-            }
           }
         }
 
@@ -414,9 +419,9 @@
 
 > **Erro:** ${err.message}`;
         renderMessages();
+        setStatus('Erro ao responder', 'bg-rose-500');
       } finally {
         save();
-        setStatus('Pronto', 'bg-emerald-500');
         $('#btnSend').classList.remove('hidden');
         $('#btnStop').classList.add('hidden');
         abortController = null;
@@ -452,14 +457,16 @@
     (function init(){
       initTheme();
       load();
-      // força host fixo com porta 11434
-      state.settings.apiBase = 'https://app.nullcore.ai:11434';
-      save();
+      // força host fixo com porta 11434 e aplica na UI, se existir
+      state.settings.apiBase = FIXED_BASE;
+      const api = $('#apiBase');
+      if (api) { api.value = FIXED_BASE; api.setAttribute('disabled',''); }
       bindSettingsUI();
       loadModels();
       renderMessages();
       updateHeaderModel();
       autoGrow();
+      setStatus('Pronto', 'bg-emerald-500');
     })();
   </script>
 </body>
