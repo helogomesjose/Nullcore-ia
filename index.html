@@ -106,7 +106,7 @@
 
   <script>
     // ===== Config: host fixo =====
-    const FIXED_BASE = 'http://app.nullcore.ai:11434'; // backend só HTTP // mesma porta do Ollama
+    const API = (p = '') => '/api' + p; // usa mesmo domínio do front (evita mixed content/CORS)
 
     // ===== Helpers =====
     const $ = (q, el=document) => el.querySelector(q);
@@ -114,7 +114,7 @@
     const html = (strings, ...values) => strings.map((s, i) => s + (values[i] ?? '')).join('');
 
     const defaults = {
-      apiBase: FIXED_BASE, // mantemos no state só por compatibilidade
+      apiBase: location.origin + '/api', // mantemos no state só por compatibilidade
       model: '',
       temperature: 1.0,
       topp: 0.9,
@@ -270,25 +270,18 @@
 
       // Se existir campo de API Base, apenas mostra fixo e desabilita
       const api = $('#apiBase');
-      if (api) { api.value = FIXED_BASE; api.setAttribute('disabled',''); }
+      if (api) { api.value = location.origin + '/api'; api.setAttribute('disabled',''); }
     }
 
-    async function loadModels() {
-      const sel = $('#model');
-      sel.innerHTML = '<option>Carregando...</option>';
-      try {
-        const res = await fetch(FIXED_BASE + '/api/tags');
-        const data = await res.json();
-        sel.innerHTML = '';
-        const models = (data?.models || []).map(m => m.name).sort();
-        if (models.length === 0) sel.innerHTML = '<option>Nenhum modelo</option>';
-        models.forEach(name => {
-          const opt = document.createElement('option');
-          opt.value = name; opt.textContent = name;
-          if (!state.settings.model) state.settings.model = name;
-          if (state.settings.model === name) opt.selected = true;
-          sel.appendChild(opt);
-        });
+    async function loadModels() {});
+        sel.addEventListener('change', e => { state.settings.model = e.target.value; save(); updateHeaderModel(); });
+        save();
+        updateHeaderModel();
+      } catch (e) {
+        if (sel) sel.innerHTML = '<option>Erro ao carregar</option>';
+        setStatus('Falha ao buscar modelos', 'bg-rose-500');
+      }
+    });
         sel.addEventListener('change', e => { state.settings.model = e.target.value; save(); updateHeaderModel(); });
         save();
         updateHeaderModel();
@@ -314,6 +307,8 @@
 
     async function onSend(e) {
       e.preventDefault();
+      // Bloqueio amigável se página em HTTPS e API em HTTP (mixed content)
+      
       const input = $('#input');
       const content = input.value.trim();
       if (!content) return;
@@ -370,7 +365,7 @@
       $('#btnStop').classList.remove('hidden');
 
       try {
-        const res = await fetch(FIXED_BASE + '/api/chat', reqInit);
+        const res = await fetch(API('/chat', reqInit);
         if (!res.ok || !res.body) throw new Error('HTTP ' + res.status);
 
         const reader = res.body.getReader();
@@ -446,16 +441,13 @@
       initTheme();
       load();
       // Aviso de mixed content quando a página estiver em HTTPS e a API em HTTP
-      if (location.protocol === 'https:') {
-        setStatus('Bloqueado: página em HTTPS e API em HTTP. Abra via http:// (sem cadeado) ou use um proxy HTTPS.', 'bg-amber-500');
-        console.warn('Mixed content bloqueado pelo navegador. Abra esta página via HTTP ou configure proxy HTTPS para a API.');
-      }
+      
       // força host fixo com porta 11434 e aplica na UI, se existir
-      state.settings.apiBase = FIXED_BASE;
+      state.settings.apiBase = location.origin + '/api';
       state.settings.model = 'gemma2:27b';
       save();
       const api = $('#apiBase');
-      if (api) { api.value = FIXED_BASE; api.setAttribute('disabled',''); }
+      if (api) { api.value = location.origin + '/api'; api.setAttribute('disabled',''); }
       bindSettingsUI();
       // loadModels desativado (modelo fixo)
       renderMessages();
